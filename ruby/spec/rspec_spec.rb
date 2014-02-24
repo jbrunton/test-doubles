@@ -45,8 +45,8 @@ describe "RSpec" do
     
     describe "instance_double" do
       it "constructs a pure mock" do
-        greeter = instance_double(Greeter, :greet => 'Hello, world!')
-        expect(greeter.greet('world')).to eq('Hello, world!')
+        greeter = instance_double(Greeter, :greet => 'Good day, world!')
+        expect(greeter.greet('world')).to eq('Good day, world!')
       end
       
       it "only allows methods defined by the class to be stubbed or mocked" do
@@ -61,8 +61,8 @@ describe "RSpec" do
       let(:greeter) { Greeter.new }
 
       it "can stub methods on partial mocks" do
-        allow(greeter).to receive(:greet) { 'Hello, world!' }
-        expect(greeter.greet).to eq('Hello, world!')
+        allow(greeter).to receive(:greet) { 'Good day, world!' }
+        expect(greeter.greet).to eq('Good day, world!')
       end
       
       it "can mock methods on partial mocks" do
@@ -73,7 +73,7 @@ describe "RSpec" do
     
     describe "spies" do
       it "allows expectations to be set on pure mocks" do
-        greeter = instance_double(Greeter, :greet => 'Hello, world!')
+        greeter = instance_double(Greeter, :greet => 'Good day, world!')
         greeter.greet('world')
         expect(greeter).to have_received(:greet).with('world')
       end
