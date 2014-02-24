@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.2.5)
+    minitest (4.7.5)
     rspec (3.0.0.beta2)
       rspec-core (= 3.0.0.beta2)
       rspec-expectations (= 3.0.0.beta2)
@@ -19,4 +20,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  minitest
   rspec (~> 3.0.0.beta)
