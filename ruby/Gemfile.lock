@@ -2,7 +2,10 @@ GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.2.5)
+    metaclass (0.0.4)
     minitest (4.7.5)
+    mocha (1.0.0)
+      metaclass (~> 0.0.1)
     rspec (3.0.0.beta2)
       rspec-core (= 3.0.0.beta2)
       rspec-expectations (= 3.0.0.beta2)
@@ -21,4 +24,5 @@ PLATFORMS
 
 DEPENDENCIES
   minitest
+  mocha
   rspec (~> 3.0.0.beta)
