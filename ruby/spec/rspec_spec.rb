@@ -14,7 +14,15 @@ describe "RSpec" do
       expect(foo).to receive(:bar).with(:baz)
       foo.bar(:baz)
     end
-  
+    
+    it "isn't strict about the order of methods" do
+      expect(foo).to receive(:bar)
+      expect(foo).to receive(:baz)
+      
+      foo.baz
+      foo.bar
+    end
+    
     it "can fake methods" do
       allow(foo).to receive(:bar) do |arg|
         arg.to_s
@@ -27,13 +35,21 @@ describe "RSpec" do
     describe "double" do
       let(:greeter) { double(Greeter) }
       
-      it "constructs an empty, pure mock" do
+      it "is strict about which methods are called" do
         expect{
           greeter.greet('world')
         }.to raise_error(
           RSpec::Mocks::MockExpectationError,
           'Double Greeter received unexpected message :greet with ("world")'
         )
+      end
+      
+      it "isn't strict about the order of method invocations" do
+        expect(greeter).to receive(:greet).with('world')
+        expect(greeter).to receive(:greet_world)
+        
+        greeter.greet_world
+        greeter.greet('world')
       end
       
       it "allows methods to be stubbed, faked and mocked" do
