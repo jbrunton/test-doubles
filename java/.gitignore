@@ -1,0 +1,10 @@
+.DS_Store
+.bundle
+bower_components
+/local.properties
+/.idea
+/build
+.gradle
+gradle.properties
+*.iml
+
