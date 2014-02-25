@@ -1,6 +1,7 @@
 package com.example;
 
 import org.junit.Test;
+import org.mockito.InOrder;
 
 import static org.mockito.Mockito.*;
 
@@ -12,18 +13,63 @@ public class ServerMockitoTest {
         Preferences preferencesStub = mock(Preferences.class);
         when(preferencesStub.isLoggingEnabled()).thenReturn(true);
 
-        // a mock which we'll use to verify some indirect output of the SUT. in this case that output is
-        // the logging.
-        Logger loggerMock = mock(Logger.class);
+        // a mock which we'll use to verify some indirect output of the SUT.
+        Logger logger = mock(Logger.class);
 
-        Server sut = new Server(loggerMock, preferencesStub);
+        Server sut = new Server(logger, preferencesStub);
 
         // act
         sut.doSomething();
 
         // assert
-        verify(loggerMock).log("did something");
+        verify(logger).log("did something");
     }
+
+
+
+    // Strict (Invocation)
+
+    @Test
+    public void fails_unexpected_invocation() {
+
+        Preferences preferencesStub = mock(Preferences.class);
+        when(preferencesStub.isLoggingEnabled()).thenReturn(true);
+
+        Logger logger = mock(Logger.class);
+
+        Server sut = new Server(logger, preferencesStub);
+
+        // act
+        sut.doSomething();
+
+        // assert
+        verify(logger).log("did something");
+        verifyNoMoreInteractions(logger); // this is the only difference from the previous test
+    }
+
+
+
+    // Strict (Order)
+
+    @Test
+    public void fails_order_of_expectations() {
+        Preferences preferencesStub = mock(Preferences.class);
+        when(preferencesStub.isLoggingEnabled()).thenReturn(true);
+
+        Logger logger = mock(Logger.class);
+
+        Server sut = new Server(logger, preferencesStub);
+
+        // act
+        sut.doSomething();
+
+        // assert
+        InOrder order = inOrder(logger);
+        order.verify(logger).saveLogs(); // will fail, wrong order of calls
+        order.verify(logger).log("did something");
+    }
+
+
 
     // Partial mocking
 
@@ -33,16 +79,16 @@ public class ServerMockitoTest {
         Preferences preferencesStub = mock(Preferences.class);
         when(preferencesStub.isLoggingEnabled()).thenReturn(true);
 
-        // create the partial mock, using existing instance
-        Logger loggerMock = spy(new LoggerImpl());
+        // partial mock, using existing instance
+        Logger logger = spy(new LoggerImpl());
 
-        Server sut = new Server(loggerMock, preferencesStub);
+        Server sut = new Server(logger, preferencesStub);
 
         // act
         sut.doSomething();
 
         // assert
-        verify(loggerMock).log("did something");
+        verify(logger).log("did something");
     }
 
 }
