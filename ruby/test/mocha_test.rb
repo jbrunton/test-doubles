@@ -5,22 +5,33 @@ require 'mocha/mini_test'
 require './greeter'
 
 describe Mocha do
-  describe "it mocks things" do
+  describe "it partially mocks and stubs things" do
     before do
-      @greeter = Minitest::Mock.new
+      @greeter = Greeter.new
     end
     
-    it "allows expectations to be set" do
-      @greeter.expect :greet, 'Hello, world!', ['world']
+    it "allows partial mocking" do
+      @greeter.expects(:greet).with('world')
       @greeter.greet('world')
-      @greeter.verify
     end
     
-    it "doesn't provide a stubbing or faking mechanism, but it's ruby, so.." do
-      def @greeter.greet(subject)
-        "Good day, world!"
-      end
-      @greeter.greet('world').must_equal 'Good day, world!'
+    it "allows partial stubbing" do
+      @greeter.stubs(:greet).with('world').returns('Good day, world!')
+      @greeter.greet('world').must_equal('Good day, world!')
+    end
+  end
+  
+  describe "it provides pure mocks and stubs" do
+    it "creates strict mocks by default" do
+      @greeter = mock('Greeter')
+      proc{
+        @greeter.greet('world')
+      }.must_raise(MiniTest::Assertion)
+    end
+    
+    it "creates pure stubs" do
+      @greeter = stub(:greet => 'Good day, world!')
+      @greeter.greet('world').must_equal('Good day, world!')
     end
   end
 end
